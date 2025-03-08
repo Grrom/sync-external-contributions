@@ -58,6 +58,11 @@ const optionDefinitions = [
     description: 'Will not prompt',
     defaultValue: false,
   },
+  {
+    name: 'author',
+    type: String,
+    description: 'Who the author should be for the new commits eg: "John <john@email.com>"',
+  },
 ];
 
 const options = commandLineArgs(optionDefinitions);
@@ -179,7 +184,7 @@ const nbNewCommits = commitSorted.reduce((count, commit) => {
   if (isNewCommit) {
     if (!options['dry-run']) {
       exec(
-        `cd ${options.destination} && echo "${commit.commit}" >> ${outputFile} && git add . && git commit -m "${commit.commit}" --date="${commit.date}"`,
+        `cd ${options.destination} && echo "${commit.commit}" >> ${outputFile} && git add . && git commit --author="${options['author']}" -m "${commit.commit}" --date="${commit.date}"`,
       );
     }
     return count + 1;
